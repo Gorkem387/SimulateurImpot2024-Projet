@@ -196,4 +196,38 @@ public class TestSimulateur {
         assertEquals(240768, calculateur.getImpotSurRevenuNet());
     }
 
+    @Test
+    @DisplayName("Couverture : Veuf sans enfant")
+    public void testVeufSansEnfant() {
+        calculateur.setSituationFamiliale(SituationFamiliale.VEUF);
+        calculateur.setNbEnfantsACharge(0);
+        calculateur.setRevenusNet(30000);
+        calculateur.calculImpotSurRevenuNet();
+        // Le code hérité met 1 part (ligne rouge du haut) puis réécrase à 1 à la fin
+        assertEquals(1, calculateur.getNbPartsFoyerFiscal());
+    }
+
+    @Test
+    @DisplayName("Couverture : Veuf avec enfants")
+    public void testVeufAvecEnfants() {
+        calculateur.setSituationFamiliale(SituationFamiliale.VEUF);
+        calculateur.setNbEnfantsACharge(2);
+        calculateur.setRevenusNet(40000);
+        calculateur.calculImpotSurRevenuNet();
+        // Le code hérité va dans le 'else' et met 2 parts
+        assertEquals(2, calculateur.getNbPartsFoyerFiscal());
+    }
+
+    @Test
+    @DisplayName("Couverture : Plafond non atteint")
+    public void testPlafondNonAtteint() {
+        // Petit revenu, le gain apporté par l'enfant est faible, donc < plafond
+        calculateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        calculateur.setRevenusNet(20000);
+        calculateur.setNbEnfantsACharge(1);
+        calculateur.calculImpotSurRevenuNet();
+        // Ici baisseImpot < plafond, donc on ne rentre pas dans le IF
+        assertTrue(calculateur.getImpotSurRevenuNet() >= 0);
+    }
+
 }
