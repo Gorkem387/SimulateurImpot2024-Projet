@@ -73,8 +73,7 @@ public class AdaptateurVersCodeReusine implements ICalculateurImpot {
 
     @Override
     public int getDecote() {
-        double partsDecl = (situationFamiliale == SituationFamiliale.MARIE || situationFamiliale == SituationFamiliale.PACSE) ? 2.0 : 1.0;
-        return (int) new CalculateurDecote().calculer(impotCalcule, partsDecl);
+        return simulateurReusine.getDerniereDecote();
     }
 
     @Override

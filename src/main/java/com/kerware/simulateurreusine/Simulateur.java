@@ -7,6 +7,7 @@ public class Simulateur {
     private final CalculateurParts calcParts = new CalculateurParts();
     private final CalculateurBareme calcBareme = new CalculateurBareme();
     private final CalculateurDecote calcDecote = new CalculateurDecote();
+    private double derniereDecoteCalculee;
 
     public long calculImpot(int revNet, SituationFamiliale sit, int nbE, int nbH, boolean parI) {
         // Abattement
@@ -27,6 +28,7 @@ public class Simulateur {
         double montantDecote = calcDecote.calculer(impotFinal, partsDecl);
         impotFinal = Math.max(0, Math.round(impotFinal) - montantDecote);
 
+        this.derniereDecoteCalculee = montantDecote;
         return (long) impotFinal;
     }
 
@@ -36,5 +38,9 @@ public class Simulateur {
             return impDecl - plafond;
         }
         return impFoyer;
+    }
+
+    public int getDerniereDecote() {
+        return (int) Math.round(derniereDecoteCalculee);
     }
 }
