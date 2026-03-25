@@ -164,7 +164,7 @@ public class TestSimulateur {
 
         // Assert
         assertEquals(486, calculateur.getImpotSurRevenuNet());
-        assertEquals(450, calculateur.getDecote(), "La décote réelle du code hérité est 449");
+        assertEquals(450, calculateur.getDecote(), "La décote réelle du code hérité est 450");
     }
 
     @Test

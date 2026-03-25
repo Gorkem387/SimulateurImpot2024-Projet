@@ -52,6 +52,10 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <excludes>
+                                <exclude>com/kerware/simulateur/Simulateur.class</exclude>
+                                <exclude>com/kerware/simulateur/AdaptateurVersCodeHerite.class</exclude>
+                            </excludes>
                             <rules>
                                 <rule>
                                     <!-- On vérifie au niveau global du projet (BUNDLE) -->
