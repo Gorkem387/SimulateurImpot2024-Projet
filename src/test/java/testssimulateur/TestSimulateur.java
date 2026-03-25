@@ -3,6 +3,7 @@ package testssimulateur;
 import com.kerware.simulateur.AdaptateurVersCodeHerite;
 import com.kerware.simulateur.ICalculateurImpot;
 import com.kerware.simulateur.SituationFamiliale;
+import com.kerware.simulateurreusine.AdaptateurVersCodeReusine;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestSimulateur {
     static final int CODE_HERITE = 1;
     static final int CODE_REUSINE = 2;
-    static final int CODE = CODE_HERITE;
+    static final int CODE = CODE_REUSINE;
     ICalculateurImpot calculateur;
     @BeforeEach
     public void prepareCalculateurImpot() {
         switch( CODE ) {
             case  CODE_HERITE -> calculateur = new AdaptateurVersCodeHerite();
-            case  CODE_REUSINE -> calculateur = null;
+            case  CODE_REUSINE -> calculateur = new AdaptateurVersCodeReusine();
         }
     }
 
@@ -203,7 +204,7 @@ public class TestSimulateur {
         calculateur.setNbEnfantsACharge(0);
         calculateur.setRevenusNet(30000);
         calculateur.calculImpotSurRevenuNet();
-        // Le code hérité met 1 part (ligne rouge du haut) puis réécrase à 1 à la fin
+
         assertEquals(1, calculateur.getNbPartsFoyerFiscal());
     }
 
@@ -214,19 +215,19 @@ public class TestSimulateur {
         calculateur.setNbEnfantsACharge(2);
         calculateur.setRevenusNet(40000);
         calculateur.calculImpotSurRevenuNet();
-        // Le code hérité va dans le 'else' et met 2 parts
+
         assertEquals(2, calculateur.getNbPartsFoyerFiscal());
     }
 
     @Test
     @DisplayName("Couverture : Plafond non atteint")
     public void testPlafondNonAtteint() {
-        // Petit revenu, le gain apporté par l'enfant est faible, donc < plafond
+
         calculateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
         calculateur.setRevenusNet(20000);
         calculateur.setNbEnfantsACharge(1);
         calculateur.calculImpotSurRevenuNet();
-        // Ici baisseImpot < plafond, donc on ne rentre pas dans le IF
+
         assertTrue(calculateur.getImpotSurRevenuNet() >= 0);
     }
 
