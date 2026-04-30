@@ -2,28 +2,36 @@ package com.kerware.simulateurreusine;
 
 import com.kerware.simulateur.SituationFamiliale;
 
-public class CalculateurParts {
-    public double calculer(SituationFamiliale situation, int nbEnfants, int nbHandicapes, boolean parentIsole) {
-        double parts = 0;
-
-        // Parts du/des déclarants
-        parts += switch (situation) {
+/**
+ * Calcule le nombre de parts du foyer fiscal.
+ */
+public final class CalculateurParts {
+    /**
+     * @param situation État civil.
+     * @param nbE Nombre d'enfants.
+     * @param nbH Enfants handicapés.
+     * @param pIso Parent isolé.
+     * @return Le nombre total de parts.
+     */
+    public double calculer(final SituationFamiliale situation,
+                           final int nbE, final int nbH, final boolean pIso) {
+        double pts = switch (situation) {
             case CELIBATAIRE, DIVORCE -> 1.0;
             case MARIE, PACSE -> 2.0;
-            case VEUF -> (nbEnfants > 0) ? 2.0 : 1.0;
+            case VEUF -> (nbE > 0) ? 2.0 : 1.0;
         };
 
-        // Parts enfants
-        if (nbEnfants <= 2) {
-            parts += nbEnfants * 0.5;
+        if (nbE <= 2) {
+            pts += nbE * ConstantesFiscales.UNITE_QUOTIENT;
         } else {
-            parts += 1.0 + (nbEnfants - 2); // 0.5 pour les 2 premiers, 1 pour les suivants
+            pts += 1.0 + (nbE - 2);
         }
 
-        // Bonus parent isolé et handicap
-        if (parentIsole && nbEnfants > 0) parts += 0.5;
-        parts += nbHandicapes * 0.5;
+        if (pIso && nbE > 0) {
+            pts += ConstantesFiscales.UNITE_QUOTIENT;
+        }
+        pts += nbH * ConstantesFiscales.UNITE_QUOTIENT;
 
-        return parts;
+        return pts;
     }
 }

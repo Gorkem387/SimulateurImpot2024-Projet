@@ -1,20 +1,43 @@
 package com.kerware.simulateur;
 
+/**
+ * Interface définissant le contrat de calcul de l'impôt sur le revenu.
+ */
 public interface ICalculateurImpot {
 
-    public void setRevenusNet( int rn );
-    public void setSituationFamiliale( SituationFamiliale sf );
-    public void setNbEnfantsACharge( int nbe );
-    public void setNbEnfantsSituationHandicap( int nbesh );
-    public void setParentIsole( boolean pi );
+    /** @param rn Le revenu net. */
+    void setRevenusNet(int rn);
 
-    public void calculImpotSurRevenuNet();
+    /** @param sf La situation familiale. */
+    void setSituationFamiliale(SituationFamiliale sf);
 
-    public int getRevenuFiscalReference();
-    public int getAbattement();
-    public double getNbPartsFoyerFiscal();
-    public int getImpotAvantDecote();
-    public int getDecote();
-    public int getImpotSurRevenuNet();
+    /** @param nbe Le nombre d'enfants. */
+    void setNbEnfantsACharge(int nbe);
 
+    /** @param nbesh Le nombre d'enfants handicapés. */
+    void setNbEnfantsSituationHandicap(int nbesh);
+
+    /** @param pi Si le parent est isolé. */
+    void setParentIsole(boolean pi);
+
+    /** Lance le calcul global. */
+    void calculImpotSurRevenuNet();
+
+    /** @return Le revenu fiscal de référence. */
+    int getRevenuFiscalReference();
+
+    /** @return Le montant de l'abattement. */
+    int getAbattement();
+
+    /** @return Le nombre de parts fiscales. */
+    double getNbPartsFoyerFiscal();
+
+    /** @return L'impôt avant application de la décote. */
+    int getImpotAvantDecote();
+
+    /** @return Le montant de la décote. */
+    int getDecote();
+
+    /** @return L'impôt final dû. */
+    int getImpotSurRevenuNet();
 }

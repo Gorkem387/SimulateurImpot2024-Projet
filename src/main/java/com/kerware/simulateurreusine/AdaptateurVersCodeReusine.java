@@ -3,67 +3,68 @@ package com.kerware.simulateurreusine;
 import com.kerware.simulateur.ICalculateurImpot;
 import com.kerware.simulateur.SituationFamiliale;
 
-public class AdaptateurVersCodeReusine implements ICalculateurImpot {
-
-    private final Simulateur simulateurReusine = new Simulateur();
-
-    private int revenusNet;
-    private SituationFamiliale situationFamiliale;
-    private int nbEnfants;
-    private int nbEnfantsHandicapes;
-    private boolean parentIsole;
-
-    private int impotCalcule;
+/**
+ * Adaptateur pour le nouveau simulateur réusiné.
+ */
+public final class AdaptateurVersCodeReusine implements ICalculateurImpot {
+    /** Instance du simulateur. */
+    private final Simulateur sim = new Simulateur();
+    /** Revenu net. */
+    private int rev;
+    /** Situation familiale. */
+    private SituationFamiliale sit;
+    /** Nombre enfants. */
+    private int nbe;
+    /** Nombre handicapés. */
+    private int nbh;
+    /** Parent isolé. */
+    private boolean iso;
+    /** Résultat calcul. */
+    private int res;
 
     @Override
-    public void setRevenusNet(int rn) {
-        this.revenusNet = rn;
+    public void setRevenusNet(final int rn) {
+        this.rev = rn;
     }
 
     @Override
-    public void setSituationFamiliale(SituationFamiliale sf) {
-        this.situationFamiliale = sf;
+    public void setSituationFamiliale(final SituationFamiliale sf) {
+        this.sit = sf;
     }
 
     @Override
-    public void setNbEnfantsACharge(int nbe) {
-        this.nbEnfants = nbe;
+    public void setNbEnfantsACharge(final int n) {
+        this.nbe = n;
     }
 
     @Override
-    public void setNbEnfantsSituationHandicap(int nbesh) {
-        this.nbEnfantsHandicapes = nbesh;
+    public void setNbEnfantsSituationHandicap(final int n) {
+        this.nbh = n;
     }
 
     @Override
-    public void setParentIsole(boolean pi) {
-        this.parentIsole = pi;
+    public void setParentIsole(final boolean p) {
+        this.iso = p;
     }
 
     @Override
     public void calculImpotSurRevenuNet() {
-        this.impotCalcule = (int) simulateurReusine.calculImpot(
-                revenusNet,
-                situationFamiliale,
-                nbEnfants,
-                nbEnfantsHandicapes,
-                parentIsole
-        );
+        this.res = (int) sim.calculImpot(rev, sit, nbe, nbh, iso);
     }
 
     @Override
     public int getRevenuFiscalReference() {
-        return revenusNet - getAbattement();
+        return rev - getAbattement();
     }
 
     @Override
     public int getAbattement() {
-        return (int) new CalculateurAbattement().calculer(revenusNet);
+        return (int) new CalculateurAbattement().calculer(rev);
     }
 
     @Override
     public double getNbPartsFoyerFiscal() {
-        return new CalculateurParts().calculer(situationFamiliale, nbEnfants, nbEnfantsHandicapes, parentIsole);
+        return new CalculateurParts().calculer(sit, nbe, nbh, iso);
     }
 
     @Override
@@ -73,11 +74,11 @@ public class AdaptateurVersCodeReusine implements ICalculateurImpot {
 
     @Override
     public int getDecote() {
-        return simulateurReusine.getDerniereDecote();
+        return sim.getDerniereDecote();
     }
 
     @Override
     public int getImpotSurRevenuNet() {
-        return impotCalcule;
+        return res;
     }
 }

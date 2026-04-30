@@ -204,12 +204,12 @@ public class Simulateur {
         // decote
         if ( nbPtsDecl == 1 ) {
             if ( mImp < seuilDecoteDeclarantSeul ) {
-                 decote = decoteMaxDeclarantSeul - ( mImp  * tauxDecote );
+                decote = decoteMaxDeclarantSeul - ( mImp  * tauxDecote );
             }
         }
         if (  nbPtsDecl == 2 ) {
             if ( mImp < seuilDecoteDeclarantCouple ) {
-                 decote =  decoteMaxDeclarantCouple - ( mImp  * tauxDecote  );
+                decote =  decoteMaxDeclarantCouple - ( mImp  * tauxDecote  );
             }
         }
         decote = Math.round( decote );

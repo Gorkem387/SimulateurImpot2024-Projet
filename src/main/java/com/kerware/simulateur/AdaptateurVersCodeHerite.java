@@ -1,32 +1,37 @@
 package com.kerware.simulateur;
 
-public class AdaptateurVersCodeHerite implements ICalculateurImpot {
+/**
+ * Adaptateur faisant le pont entre l'interface standard
+ * et la vieille classe Simulateur.
+ */
+public final class AdaptateurVersCodeHerite implements ICalculateurImpot {
 
-    Simulateur simulateurHerite = new Simulateur();
+    /** Instance du vieux simulateur à tester. */
+    private final Simulateur simulateurHerite = new Simulateur();
 
     @Override
-    public void setRevenusNet(int rn) {
-        simulateurHerite.setRevenusNet( rn );
+    public void setRevenusNet(final int rn) {
+        simulateurHerite.setRevenusNet(rn);
     }
 
     @Override
-    public void setSituationFamiliale(SituationFamiliale sf) {
-      simulateurHerite.setSituationFamilliale( sf );
+    public void setSituationFamiliale(final SituationFamiliale sf) {
+        simulateurHerite.setSituationFamilliale(sf);
     }
 
     @Override
-    public void setNbEnfantsACharge(int nbe) {
-       simulateurHerite.setNbEnfantsACharge( nbe );
+    public void setNbEnfantsACharge(final int nbe) {
+        simulateurHerite.setNbEnfantsACharge(nbe);
     }
 
     @Override
-    public void setNbEnfantsSituationHandicap(int nbesh) {
-        simulateurHerite.setNbEnfantsEnSituationDeHandicap( nbesh );
+    public void setNbEnfantsSituationHandicap(final int nbesh) {
+        simulateurHerite.setNbEnfantsEnSituationDeHandicap(nbesh);
     }
 
     @Override
-    public void setParentIsole(boolean pi) {
-        simulateurHerite.setParentIsole( pi );
+    public void setParentIsole(final boolean pi) {
+        simulateurHerite.setParentIsole(pi);
     }
 
     @Override
@@ -51,8 +56,8 @@ public class AdaptateurVersCodeHerite implements ICalculateurImpot {
 
     @Override
     public int getImpotAvantDecote() {
-        return simulateurHerite.getImpotSurRevenuNet() +
-                simulateurHerite.getDecote();
+        return simulateurHerite.getImpotSurRevenuNet()
+                + simulateurHerite.getDecote();
     }
 
     @Override
