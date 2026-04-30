@@ -231,5 +231,108 @@ public class TestSimulateur {
         assertTrue(calculateur.getImpotSurRevenuNet() >= 0);
     }
 
+    @Test
+    @DisplayName("Couverture : Cas PACSE (équivalent Marié)")
+    public void testSituationPacse() {
+        calculateur.setSituationFamiliale(SituationFamiliale.PACSE);
+        calculateur.setRevenusNet(50000);
+        calculateur.calculImpotSurRevenuNet();
+
+        // Vérifie que le comportement est identique à MARIE
+        assertEquals(2.0, calculateur.getNbPartsFoyerFiscal());
+    }
+
+    @Test
+    @DisplayName("Couverture : Parent Isolé sans enfant (pas de bonus)")
+    public void testParentIsoleSansEnfant() {
+        calculateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        calculateur.setNbEnfantsACharge(0);
+        calculateur.setParentIsole(true); // Isolé mais sans enfant
+        calculateur.setRevenusNet(30000);
+        calculateur.calculImpotSurRevenuNet();
+
+        // Le bonus de 0.5 ne doit pas s'appliquer car nbEnf == 0
+        assertEquals(1.0, calculateur.getNbPartsFoyerFiscal());
+    }
+
+    @Test
+    @DisplayName("Couverture : Décote pour un couple (revenu bas)")
+    public void testDecoteCouple() {
+        calculateur.setSituationFamiliale(SituationFamiliale.MARIE);
+        calculateur.setRevenusNet(25000); // Revenu bas pour un couple
+        calculateur.setNbEnfantsACharge(0);
+        calculateur.calculImpotSurRevenuNet();
+
+        // Doit déclencher la branche de décote spécifique au couple (seuil 3191€)
+        assertTrue(calculateur.getDecote() > 0, "Le couple devrait bénéficier d'une décote.");
+    }
+
+    @Test
+    @DisplayName("Couverture : Exactement 2 enfants (limite nbEnf <= 2)")
+    public void testExactementDeuxEnfants() {
+        calculateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        calculateur.setNbEnfantsACharge(2);
+        calculateur.calculImpotSurRevenuNet();
+
+        // 1 part (adulte) + 0.5 (enf1) + 0.5 (enf2) = 2.0
+        assertEquals(2.0, calculateur.getNbPartsFoyerFiscal());
+    }
+
+    @Test
+    @DisplayName("Couverture : Revenu très faible (Branches décote et abattement)")
+    public void testRevenuTresFaible() {
+        // Teste le plancher d'abattement (495€) et la décote totale
+        calculateur.setRevenusNet(1000);
+        calculateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        calculateur.calculImpotSurRevenuNet();
+
+        assertEquals(495, calculateur.getAbattement());
+        assertEquals(0, calculateur.getImpotSurRevenuNet());
+    }
+
+    @Test
+    @DisplayName("Couverture : Appel des méthodes de l'Adapter")
+    public void testAppelMethodesAdapter() {
+        calculateur.setRevenusNet(30000);
+        calculateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        calculateur.calculImpotSurRevenuNet();
+
+        int impotTotal = calculateur.getImpotAvantDecote();
+        assertTrue(impotTotal >= calculateur.getImpotSurRevenuNet());
+    }
+
+    @Test
+    @DisplayName("Couverture : Revenu extrême pour forcer la fin du barème")
+    public void testRevenuExtremePourBareme() {
+        calculateur.setRevenusNet(Integer.MAX_VALUE);
+        calculateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        calculateur.calculImpotSurRevenuNet();
+
+        assertTrue(calculateur.getImpotSurRevenuNet() > 0);
+    }
+
+    @Test
+    @DisplayName("Couverture : Forcer la fin naturelle de la boucle du barème")
+    public void testFinNaturelleBareme() {
+        calculateur.setRevenusNet(Integer.MAX_VALUE);
+        calculateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+
+        calculateur.calculImpotSurRevenuNet();
+
+        // On vérifie juste que le calcul s'est fait sans erreur
+        assertTrue(calculateur.getImpotSurRevenuNet() > 0);
+    }
+
+    @Test
+    @DisplayName("Couverture Bareme : Forcer la sortie naturelle du for")
+    public void testBaremeSortieNaturelle() {
+        com.kerware.simulateurreusine.CalculateurBareme bareme =
+                new com.kerware.simulateurreusine.CalculateurBareme();
+
+        double revenuEnorme = 3000000000.0; // 3 milliards
+        double resultat = bareme.calculerImpotBrut(revenuEnorme);
+
+        assertTrue(resultat > 0);
+    }
 }
 
