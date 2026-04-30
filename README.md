@@ -1,13 +1,13 @@
 # 🧮 Simulateur d'Impôt sur le Revenu 2024
 
-> Transformer un code legacy en code professionnel : mission accomplie à 97% de couverture
+> Transformer un code legacy en code professionnel : mission accomplie à 98% de couverture
 
 ## 🎯 Le projet en bref
 
 Un simulateur d'impôt "qui marche mais qui fait peur" transformé en code propre, testé et maintenable.
 
 **Challenge relevé :**
-- ✅ 97% de couverture de code (objectif : 90% minimum)
+- ✅ 98% de couverture de code (objectif : 90% minimum)
 - ✅ 100% des tests passent
 - ✅ Conformité Checkstyle
 - ✅ Architecture modulaire avec adaptateurs
@@ -76,7 +76,7 @@ System.out.println("Impôt : " + impot + "€");
 
 | Critère | Objectif | ✅ Résultat |
 |---------|----------|-------------|
-| Couverture de code | ≥ 90% | **97%** |
+| Couverture de code | ≥ 90% | **98%** |
 | Tests réussis | 100% | **100%** |
 | Build Maven | SUCCESS | **SUCCESS** |
 
